@@ -12,14 +12,8 @@ router.get('/vehicles/:id', (req, res) => {
     id: req.params.id,
     responseType: 'JSON'
   }
-  let options = {
-    method: "POST",
-    json: true,
-    body: data,
-    headers: {
-      'content-type': 'application/json'
-    }
-  }
+  let options = configurePostOptions(data);
+
   rp(`${process.env.TEST_API}/getVehicleInfoService`, options)
   .then((response) => {
     res.send(normalizeVehicleInfo(response.data));
@@ -40,6 +34,17 @@ let normalizeVehicleInfo = (data) => {
 let getDoorCount = (data) => {
   console.log(data);
   return data.fourDoorSedan.value === 'True' ? 4 : 2;
+}
+
+let configurePostOptions = (data) => {
+  return {
+    method: "POST",
+    json: true,
+    body: data,
+    headers: {
+      'content-type': 'application/json'
+    }
+  }
 }
 
 module.exports = router;
