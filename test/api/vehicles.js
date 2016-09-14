@@ -55,7 +55,7 @@ describe('Vehicles API Endpoint', () => {
       .expect(200, done);
     });
 
-    it('should return vehicle data in the correct JSON format', (done) => {
+    it('should return security data in the correct JSON format', (done) => {
       request(app)
       .get('/api/v1/vehicles/1235/doors')
       .expect((res) => {
@@ -98,5 +98,50 @@ describe('Vehicles API Endpoint', () => {
       .expect('Content-Type', /json/)
       .expect(404, done);
     });
+  })
+
+  describe('getVehicleFuelRange', () => {
+    it('should return 200 for a valid vehicle id', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1234/fuel')
+      .expect('Content-Type', /json/)
+      .expect(200, done);
+    });
+
+    it('should return fuel data in the correct JSON format', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1234/fuel')
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(Object.keys(res.body)).to.have.length(1);
+        expect(res.body).to.have.all.key('percent');
+      })
+      .end(done);
+    })
+
+    it('should return a number for fuel percent', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1234/fuel')
+      .expect((res) => {
+        expect(res.body.percent).to.be.a('number');
+      })
+      .end(done);
+    })
+
+    it('should return null for electric cars', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1235/fuel')
+      .expect((res) => {
+        expect(res.body.percent).to.equal(null);
+      })
+      .end(done);
+    })
+
+    it('should return 404 for an invalid vehicle id', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1236/fuel')
+      .expect('Content-Type', /json/)
+      .expect(404, done);
+    })
   })
 });

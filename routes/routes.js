@@ -8,13 +8,8 @@ router.get('/vehicles/:id', (req, res) => {
   
   //Function that checks make of vehicle
   //Makes request to appropriate vehicle manufacturer API 
-
-  let data = {
-    id: req.params.id,
-    responseType: 'JSON'
-  }
-
-  let options = configurePostOptions(data);
+  let vehicleId = req.params.id;
+  let options = configurePostOptions(vehicleId);
 
   rp(`${process.env.TEST_API}/getVehicleInfoService`, options)
   .then((response) => {
@@ -29,12 +24,8 @@ router.get('/vehicles/:id', (req, res) => {
 
 router.get('/vehicles/:id/doors', (req, res) => {
 
-  let data = {
-    id: req.params.id,
-    responseType: 'JSON'
-  }
-
-  let options = configurePostOptions(data);
+  let vehicleId = req.params.id;
+  let options = configurePostOptions(vehicleId);
 
   rp(`${process.env.TEST_API}/getSecurityStatusService`, options)
   .then((response) => {
@@ -46,6 +37,19 @@ router.get('/vehicles/:id/doors', (req, res) => {
     throw err;
   });
 
+})
+
+router.get('/vehicles/:id/fuel', (req, res) => {
+  let vehicleId = req.params.id;
+  let options = configurePostOptions(vehicleId);
+
+  rp(`${process.env.TEST_API}/getEnergyService`, options)
+  .then((response) => {
+    console.log(response);
+    response.status === '200' ?
+      res.send(normalizeFuelData(response.data)) :
+      res.status(response.status).send(response);
+  })
 })
 
 let normalizeSecurityData = (data) => {
@@ -68,15 +72,24 @@ let normalizeVehicleData = (data) => {
   return result;
 }
 
+let normalizeFuelData = (data) => {
+  return {
+    percent: data.tankLevel.value === 'null' ? null : Number(data.tankLevel.value)
+  }
+}
+
 let getDoorCount = (data) => {
   return data.fourDoorSedan.value === 'True' ? 4 : 2;
 }
 
-let configurePostOptions = (data) => {
+let configurePostOptions = (vehicleId) => {
   return {
     method: "POST",
     json: true,
-    body: data,
+    body: {
+      id: vehicleId,
+      responseType: "JSON"
+    },
     headers: {
       'content-type': 'application/json'
     }
