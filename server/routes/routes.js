@@ -1,26 +1,11 @@
 const router = require('express').Router();
 const rp = require('request-promise');
 const _ = require('underscore')
+const vehicles = require('../vehicles/index');
 
 
 //Get Vehicle Data
-router.get('/vehicles/:id', (req, res) => {
-  
-  //Function that checks make of vehicle
-  //Makes request to appropriate vehicle manufacturer API 
-  let vehicleId = req.params.id;
-  let options = configurePostOptions(vehicleId);
-
-  rp(`${process.env.TEST_API}/getVehicleInfoService`, options)
-  .then((response) => {
-    response.status === '200' ? 
-      res.send(normalizeVehicleData(response.data)) :
-      res.status(response.status).send(response);
-  })
-  .catch(err => {
-    throw err;
-  });
-});
+router.get('/vehicles/:id', vehicles.getVehicleData)
 
 router.get('/vehicles/:id/doors', (req, res) => {
 
@@ -37,7 +22,7 @@ router.get('/vehicles/:id/doors', (req, res) => {
     throw err;
   });
 
-})
+});
 
 router.get('/vehicles/:id/fuel', (req, res) => {
   let vehicleId = req.params.id;
