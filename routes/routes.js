@@ -20,6 +20,9 @@ router.get('/vehicles/:id', (req, res) => {
   .then((response) => {
     res.send(normalizeVehicleData(response.data));
   })
+  .catch(err => {
+    throw err;
+  });
 });
 
 router.get('/vehicles/:id/doors', (req, res) => {
@@ -35,6 +38,9 @@ router.get('/vehicles/:id/doors', (req, res) => {
   .then((response) => {
     res.send(normalizeSecurityData(response.data));
   })
+  .catch(err => {
+    throw err;
+  });
 
 })
 

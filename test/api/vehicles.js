@@ -6,7 +6,7 @@ const app = require('../../server/server');
 
 describe('Vehicles API Endpoint', () => {
 
-  describe('getVehicle', () => {
+  describe('getVehicleData', (done) => {
 
     it('should return 200 for a valid vehicle id', (done) => {
       request(app)
@@ -15,14 +15,23 @@ describe('Vehicles API Endpoint', () => {
       .expect(200, done);
     });
 
-    it('should return vehicle data in the correct json format', () => {
+    it('should return vehicle data in the correct json format', (done) => {
       request(app)
       .get('/api/v1/vehicles/1234')
-      .end((res) => {
-        expect(res).to.have.all.key('vin', 'color', 'doorCount', 'driveTrain');
-      });
+      .expect((res) => {
+        expect(res.body).to.have.all.key('vin', 'color', 'doorCount', 'driveTrain');
+      })
+      .end(done);
     });
 
   });
 
+  describe('getVehicleSecurity', (done) => {
+    it('should return 200 for a valid vehicle id', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1235/doors')
+      .expect('Content-Type', /json/)
+      .expect(200, done);
+    })
+  })
 });
