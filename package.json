@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha test/api/vehicles",
-    "start": "nodemon server/server.js"
+    "start": "node_modules/.bin/nodemon server/server.js"
   },
   "repository": {
     "type": "git",
@@ -19,10 +19,14 @@
   "homepage": "https://github.com/billytianlan/mvp-api#readme",
   "dependencies": {
     "dotenv": "^2.0.0",
-    "koa": "^1.2.4",
-    "mocha": "^3.0.2",
+    "express": "^4.14.0",
+    "nodemon": "^1.10.2",
     "request": "^2.74.0",
-    "request-promise": "^4.1.1",
+    "request-promise": "^4.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
     "supertest": "^2.0.0"
   }
 }
