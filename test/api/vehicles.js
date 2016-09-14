@@ -19,7 +19,21 @@ describe('Vehicles API Endpoint', () => {
       request(app)
       .get('/api/v1/vehicles/1234')
       .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(Object.keys(res.body)).to.have.length(4);
         expect(res.body).to.have.all.key('vin', 'color', 'doorCount', 'driveTrain');
+      })
+      .end(done);
+    });
+
+    it('should return the correct data types for each value', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1234')
+      .expect((res) => {
+        expect(res.body.vin).to.be.a('string');
+        expect(res.body.color).to.be.a('string');
+        expect(res.body.doorCount).to.be.a('number');
+        expect(res.body.driveTrain).to.be.a('string');
       })
       .end(done);
     });
@@ -29,7 +43,7 @@ describe('Vehicles API Endpoint', () => {
       .get('/api/v1/vehicles/1236')
       .expect('Content-Type', /json/)
       .expect(404, done);
-    })
+    });
 
   });
 
@@ -39,7 +53,7 @@ describe('Vehicles API Endpoint', () => {
       .get('/api/v1/vehicles/1235/doors')
       .expect('Content-Type', /json/)
       .expect(200, done);
-    })
+    });
 
     it('should return vehicle data in the correct JSON format', (done) => {
       request(app)
@@ -49,7 +63,7 @@ describe('Vehicles API Endpoint', () => {
         expect(res.body[0]).to.have.all.key('location', 'locked');
       })
       .end(done);
-    })
+    });
 
     it('should return the correct amount of doors for a four door', (done) => {
       request(app)
@@ -58,7 +72,7 @@ describe('Vehicles API Endpoint', () => {
         expect(res.body).to.have.length(4)
       })
       .end(done);
-    })
+    });
 
     it('should return the correct amount of doors for a two door', (done) => {
       request(app)
@@ -67,15 +81,22 @@ describe('Vehicles API Endpoint', () => {
         expect(res.body).to.have.length(2)
       })
       .end(done);
-    })
+    });
 
-    it('should return boolean data for locked', (done) => {
+    it('should return boolean data for locked property', (done) => {
       request(app)
       .get('/api/v1/vehicles/1235/doors')
       .expect((res) => {
         expect(res.body[0].locked).to.be.a('boolean');
       })
       .end(done);
-    })
+    });
+
+    it('should return 404 for an invalid vehicle id', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1236/doors')
+      .expect('Content-Type', /json/)
+      .expect(404, done);
+    });
   })
 });
