@@ -18,7 +18,9 @@ router.get('/vehicles/:id', (req, res) => {
 
   rp(`${process.env.TEST_API}/getVehicleInfoService`, options)
   .then((response) => {
-    res.send(normalizeVehicleData(response.data));
+    response.status === '200' ? 
+      res.send(normalizeVehicleData(response.data)) :
+      res.status(response.status).send(response);
   })
   .catch(err => {
     throw err;
@@ -36,7 +38,9 @@ router.get('/vehicles/:id/doors', (req, res) => {
 
   rp(`${process.env.TEST_API}/getSecurityStatusService`, options)
   .then((response) => {
-    res.send(normalizeSecurityData(response.data));
+    response.status === '200' ? 
+      res.send(normalizeSecurityData(response.data)) :
+      res.status(response.status).send(response);
   })
   .catch(err => {
     throw err;

@@ -15,7 +15,7 @@ describe('Vehicles API Endpoint', () => {
       .expect(200, done);
     });
 
-    it('should return vehicle data in the correct json format', (done) => {
+    it('should return vehicle data in the correct JSON format', (done) => {
       request(app)
       .get('/api/v1/vehicles/1234')
       .expect((res) => {
@@ -23,6 +23,13 @@ describe('Vehicles API Endpoint', () => {
       })
       .end(done);
     });
+
+    it('should return 404 for an invalid vehicle id', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1236')
+      .expect('Content-Type', /json/)
+      .expect(404, done);
+    })
 
   });
 
@@ -32,6 +39,43 @@ describe('Vehicles API Endpoint', () => {
       .get('/api/v1/vehicles/1235/doors')
       .expect('Content-Type', /json/)
       .expect(200, done);
+    })
+
+    it('should return vehicle data in the correct JSON format', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1235/doors')
+      .expect((res) => {
+        expect(res.body).to.be.an('array');
+        expect(res.body[0]).to.have.all.key('location', 'locked');
+      })
+      .end(done);
+    })
+
+    it('should return the correct amount of doors for a four door', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1234/doors')
+      .expect((res) => {
+        expect(res.body).to.have.length(4)
+      })
+      .end(done);
+    })
+
+    it('should return the correct amount of doors for a two door', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1235/doors')
+      .expect((res) => {
+        expect(res.body).to.have.length(2)
+      })
+      .end(done);
+    })
+
+    it('should return boolean data for locked', (done) => {
+      request(app)
+      .get('/api/v1/vehicles/1235/doors')
+      .expect((res) => {
+        expect(res.body[0].locked).to.be.a('boolean');
+      })
+      .end(done);
     })
   })
 });
