@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const rp = require('request-promise');
+const _ = require('underscore')
 
 
 //Get Vehicle Data
@@ -12,15 +13,41 @@ router.get('/vehicles/:id', (req, res) => {
     id: req.params.id,
     responseType: 'JSON'
   }
+
   let options = configurePostOptions(data);
 
   rp(`${process.env.TEST_API}/getVehicleInfoService`, options)
   .then((response) => {
-    res.send(normalizeVehicleInfo(response.data));
+    res.send(normalizeVehicleData(response.data));
   })
 });
 
-let normalizeVehicleInfo = (data) => {
+router.get('/vehicles/:id/doors', (req, res) => {
+
+  let data = {
+    id: req.params.id,
+    responseType: 'JSON'
+  }
+
+  let options = configurePostOptions(data);
+
+  rp(`${process.env.TEST_API}/getSecurityStatusService`, options)
+  .then((response) => {
+    res.send(normalizeSecurityData(response.data));
+  })
+
+})
+
+let normalizeSecurityData = (data) => {
+  return _.map(data.doors.values, (door) => {
+    return {
+      "location": door.location.value,
+      "locked": door.locked.value === "True" ? true : false
+    }
+  })
+}
+
+let normalizeVehicleData = (data) => {
   let doorCount = getDoorCount(data);
   let result = {
     vin: data.vin.value,
@@ -32,7 +59,6 @@ let normalizeVehicleInfo = (data) => {
 }
 
 let getDoorCount = (data) => {
-  console.log(data);
   return data.fourDoorSedan.value === 'True' ? 4 : 2;
 }
 
