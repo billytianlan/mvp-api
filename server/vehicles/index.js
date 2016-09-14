@@ -1,7 +1,7 @@
 const rp = require('request-promise');
 const _ = require('underscore')
 
-let getVehicleData = (req, res) => {
+const getData = (req, res) => {
   console.log('in the data');
   //Function that checks make of vehicle
   //Makes request to appropriate vehicle manufacturer API 
@@ -26,6 +26,36 @@ let getVehicleData = (req, res) => {
       "locked": door.locked.value === "True" ? true : false
     }
   })
+}
+
+const getSecurityData = (req, res) => {
+
+  let vehicleId = req.params.id;
+  let options = configurePostOptions(vehicleId);
+
+  rp(`${process.env.TEST_API}/getSecurityStatusService`, options)
+  .then((response) => {
+    response.status === '200' ? 
+      res.send(normalizeSecurityData(response.data)) :
+      res.status(response.status).send(response);
+  })
+  .catch(err => {
+    throw err;
+  });
+
+}
+
+const getFuelData = (req, res) => {
+  let vehicleId = req.params.id;
+  let options = configurePostOptions(vehicleId);
+
+  rp(`${process.env.TEST_API}/getEnergyService`, options)
+  .then((response) => {
+    console.log(response);
+    response.status === '200' ?
+      res.send(normalizeFuelData(response.data)) :
+      res.status(response.status).send(response);
+  });
 }
 
 let normalizeVehicleData = (data) => {
@@ -64,5 +94,7 @@ let configurePostOptions = (vehicleId) => {
 }
 
 module.exports = {
-  getVehicleData: getVehicleData
+  getData: getData,
+  getSecurityData: getSecurityData,
+  getFuelData: getFuelData
 }
