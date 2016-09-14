@@ -20,7 +20,9 @@
   "dependencies": {
     "dotenv": "^2.0.0",
     "koa": "^1.2.4",
+    "mocha": "^3.0.2",
     "request": "^2.74.0",
-    "request-promise": "^4.1.1"
+    "request-promise": "^4.1.1",
+    "supertest": "^2.0.0"
   }
 }
