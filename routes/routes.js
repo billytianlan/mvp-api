@@ -26,5 +26,20 @@ router.get('/vehicles/:id', (req, res) => {
   })
 });
 
+let normalizeVehicleInfo = (data) => {
+  let doorCount = getDoorCount(data);
+  let result = {
+    vin: data.vin.value,
+    color: data.color.value,
+    doorCount: doorCount,
+    driveTrain: data.driveTrain.value
+  }
+  return result;
+}
+
+let getDoorCount = (data) => {
+  console.log(data);
+  return data.fourDoorSedan.value === 'True' ? 4 : 2;
+}
 
 module.exports = router;
