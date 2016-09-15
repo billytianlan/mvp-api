@@ -6,7 +6,8 @@ const Vehicle = (vehicleId) => {
   //In the future we can have some logic that dispatches to the appropriote manufacturer API
   vehicle.getData = () => gmApi.getVehicleInfoService(vehicleId);
   vehicle.getSecurityData = () => gmApi.getSecurityStatusService(vehicleId);
-  vehicle.getFuelData = () => gmApi.getEnergyService(vehicleId);
+  vehicle.getEnergyData = () => gmApi.getEnergyService(vehicleId);
+  
 
   return vehicle;
 }

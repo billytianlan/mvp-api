@@ -27,9 +27,9 @@ const getSecurityData = (req, res) => {
   });
 }
 
-const getFuelData = (req, res) => {
+const getEnergyData = (req, res) => {
   let vehicle = Vehicle(req.params.id);
-  vehicle.getFuelData()
+  vehicle.getEnergyData()
   .then(resp => {
     res.status(resp.status).send(resp.data)
   })
@@ -42,5 +42,5 @@ const getFuelData = (req, res) => {
 module.exports = {
   getData: getData,
   getSecurityData: getSecurityData,
-  getFuelData: getFuelData
+  getEnergyData: getEnergyData
 }
