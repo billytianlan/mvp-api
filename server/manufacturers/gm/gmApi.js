@@ -53,7 +53,7 @@ const gmApi = {
   }
 }
 
-let handleApplicationError = () => {
+const handleApplicationError = () => {
   return {
     status: 500,
     data: {

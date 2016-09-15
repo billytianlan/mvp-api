@@ -14,5 +14,4 @@ router.get('/vehicles/:id/battery', vehicle.getBatteryData);
 //Post Start/Stop Engine
 router.post('/vehicles/:id/engine', vehicle.actionEngine);
 
-
 module.exports = router;

@@ -68,7 +68,7 @@ const gmHelper = {
   }
 }
 
-let getDoorCount = data => {
+const getDoorCount = data => {
   if (Boolean(data.fourDoorSedan.value.toLowerCase())) {
     return 4
   } else if (Boolean(data.twoDoorCoupe.value.toLowerCase())) {
