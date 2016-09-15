@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha test/api/vehicles",
+    "test": "node_modules/.bin/mocha test/api/vehicleSpec",
     "start": "node_modules/.bin/nodemon server/server.js"
   },
   "repository": {

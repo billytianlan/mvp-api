@@ -1,5 +1,6 @@
 const rp = require('request-promise');
-const _ = require('underscore')
+const _ = require('underscore');
+const gm = require('../manufacturers/gmApi');
 
 const getData = (req, res) => {
   console.log('in the data');
@@ -7,25 +8,15 @@ const getData = (req, res) => {
   //Makes request to appropriate vehicle manufacturer API 
   let vehicleId = req.params.id;
   let options = configurePostOptions(vehicleId);
-
-    rp(`${process.env.TEST_API}/getVehicleInfoService`, options)
-    .then((response) => {
-      response.status === '200' ? 
-        res.send(normalizeVehicleData(response.data)) :
-        res.status(response.status).send(response);
-    })
-    .catch(err => {
-      throw err;
-    });
-  };
-
-  let normalizeSecurityData = (data) => {
-  return _.map(data.doors.values, (door) => {
-    return {
-      "location": door.location.value,
-      "locked": door.locked.value === "True" ? true : false
-    }
+  gm.getVehicleInfoService(vehicleId)
+  .then(resp => {
+    console.log('this is the resp', resp);
+    res.status(resp.status).send(resp.data);
   })
+  .catch(err => {
+    console.log(err);
+  })
+
 }
 
 const getSecurityData = (req, res) => {
@@ -56,6 +47,15 @@ const getFuelData = (req, res) => {
       res.send(normalizeFuelData(response.data)) :
       res.status(response.status).send(response);
   });
+}
+
+let normalizeSecurityData = (data) => {
+  return _.map(data.doors.values, (door) => {
+    return {
+      "location": door.location.value,
+      "locked": door.locked.value === "True" ? true : false
+    }
+  })
 }
 
 let normalizeVehicleData = (data) => {
