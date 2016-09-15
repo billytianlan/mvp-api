@@ -27,9 +27,21 @@ const getSecurityData = (req, res) => {
   });
 }
 
-const getEnergyData = (req, res) => {
+const getFuelData = (req, res) => {
   let vehicle = Vehicle(req.params.id);
-  vehicle.getEnergyData()
+  vehicle.getEnergyData('fuel')
+  .then(resp => {
+    res.status(resp.status).send(resp.data)
+  })
+  .catch(err => {
+    console.log('Error retreiving info from GM API getEnergyService:', err);
+    res.status(502).send({message: 'Error retreiving data from GM API'})
+  });
+}
+
+const getBatteryData = (req, res) => {
+  let vehicle = Vehicle(req.params.id);
+  vehicle.getEnergyData('battery')
   .then(resp => {
     res.status(resp.status).send(resp.data)
   })
@@ -42,5 +54,6 @@ const getEnergyData = (req, res) => {
 module.exports = {
   getData: getData,
   getSecurityData: getSecurityData,
-  getEnergyData: getEnergyData
+  getFuelData: getFuelData,
+  getBatteryData: getBatteryData
 }

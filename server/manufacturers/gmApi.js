@@ -23,10 +23,10 @@ const gmApi = {
     });
   },
 
-  getEnergyService: vehicleId => {
+  getEnergyService: (vehicleId, energy) => {
     return rp(`${process.env.TEST_API}/getEnergyService`, configurePostOptions(vehicleId))
     .catch(err => err)
-    .then(response => response.status === '200' ? normalizeFuelData(response) : normalizeApiError(response))
+    .then(response => response.status === '200' ? normalizeEnergyData(response, energy) : normalizeApiError(response))
     .catch(err => {
       console.log('Error normalizing GM fuel data:', err)
       return handleApplicationError();
@@ -93,11 +93,11 @@ let normalizeSecurityData = response => {
   }
 }
 
-let normalizeFuelData = response => {
+let normalizeEnergyData = (response, energy) => {
   return {
     status: response.status,
     data: {
-      percent: JSON.parse(response.data.tankLevel.value)
+      percent: energy === 'fuel' ? JSON.parse(response.data.tankLevel.value) : JSON.parse(response.data.batteryLevel.value)
     }
   }
 }
