@@ -1,4 +1,4 @@
-const gmApi = require('../manufacturers/gm/gmApi'); 
+const gmApi = require('../apiAdapters/gm/gmApi'); 
 
 const Vehicle = (vehicleId) => {
   //Create vehicle instance
