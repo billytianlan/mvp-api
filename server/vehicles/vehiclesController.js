@@ -1,96 +1,45 @@
 const rp = require('request-promise');
 const _ = require('underscore');
 const gm = require('../manufacturers/gmApi');
+const Vehicle = require('./vehicleModel');
 
 const getData = (req, res) => {
-  console.log('in the data');
-  //Function that checks make of vehicle
-  //Makes request to appropriate vehicle manufacturer API 
-  let vehicleId = req.params.id;
-  let options = configurePostOptions(vehicleId);
-  gm.getVehicleInfoService(vehicleId)
+  let vehicle = Vehicle(req.params.id);
+  vehicle.getData()
   .then(resp => {
-    console.log('this is the resp', resp);
     res.status(resp.status).send(resp.data);
   })
   .catch(err => {
-    console.log(err);
+    console.log('Error retreiving info from GM API getVehicleInfoService:', err);
+    res.status(502).send({reason: 'Error retreiving data from GM API'});
   })
-
 }
 
 const getSecurityData = (req, res) => {
-
-  let vehicleId = req.params.id;
-  let options = configurePostOptions(vehicleId);
-
-  rp(`${process.env.TEST_API}/getSecurityStatusService`, options)
-  .then((response) => {
-    response.status === '200' ? 
-      res.send(normalizeSecurityData(response.data)) :
-      res.status(response.status).send(response);
+  let vehicle = Vehicle(req.params.id);
+  vehicle.getSecurityData()
+  .then(resp => {
+    res.status(resp.status).send(resp.data)
   })
   .catch(err => {
-    throw err;
+    console.log('Error retreiving info from GM API getSecurityStatusService:', err);
+    res.status(502).send({reason: 'Error retreiving data from GM API'});
   });
-
 }
 
 const getFuelData = (req, res) => {
-  let vehicleId = req.params.id;
-  let options = configurePostOptions(vehicleId);
-
-  rp(`${process.env.TEST_API}/getEnergyService`, options)
-  .then((response) => {
-    console.log(response);
-    response.status === '200' ?
-      res.send(normalizeFuelData(response.data)) :
-      res.status(response.status).send(response);
-  });
-}
-
-let normalizeSecurityData = (data) => {
-  return _.map(data.doors.values, (door) => {
-    return {
-      "location": door.location.value,
-      "locked": door.locked.value === "True" ? true : false
-    }
+  let vehicle = Vehicle(req.params.id);
+  vehicle.getFuelData()
+  .then(resp => {
+    res.status(resp.status).send(resp.data)
   })
-}
-
-let normalizeVehicleData = (data) => {
-  let doorCount = getDoorCount(data);
-  let result = {
-    vin: data.vin.value,
-    color: data.color.value,
-    doorCount: doorCount,
-    driveTrain: data.driveTrain.value
-  }
-  return result;
-}
-
-let normalizeFuelData = (data) => {
-  return {
-    percent: data.tankLevel.value === 'null' ? null : Number(data.tankLevel.value)
-  }
-}
-
-let getDoorCount = (data) => {
-  return data.fourDoorSedan.value === 'True' ? 4 : 2;
-}
-
-let configurePostOptions = (vehicleId) => {
-  return {
-    method: "POST",
-    json: true,
-    body: {
-      id: vehicleId,
-      responseType: "JSON"
-    },
-    headers: {
-      'content-type': 'application/json'
-    }
-  }
+  .catch(err => {
+    console.log('Error retreiving info from GM API getEnergyService:', err);
+    res.status(502).send({
+      status: 502,
+      reason: 'Error retreiving data from GM API'
+    })
+  });
 }
 
 module.exports = {
