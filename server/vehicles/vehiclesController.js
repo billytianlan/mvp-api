@@ -1,6 +1,3 @@
-const rp = require('request-promise');
-const _ = require('underscore');
-const gm = require('../manufacturers/gmApi');
 const Vehicle = require('./vehicleModel');
 
 const getData = (req, res) => {

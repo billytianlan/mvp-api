@@ -1,4 +1,4 @@
-const gmApi = require('../manufacturers/gmApi'); 
+const gmApi = require('../manufacturers/gm/gmApi'); 
 
 const Vehicle = (vehicleId) => {
   let vehicle = {};
