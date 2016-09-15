@@ -6,7 +6,7 @@ const app = require('../../server/server');
 
 describe('Vehicles API Endpoint', () => {
 
-  describe('getVehicleData', () => {
+  describe('getData', () => {
 
     it('should return 200 for a valid vehicle id', done => {
       request(app)
@@ -47,7 +47,7 @@ describe('Vehicles API Endpoint', () => {
 
   });
 
-  describe('getVehicleSecurity', () => {
+  describe('getSecurityData', () => {
     it('should return 200 for a valid vehicle id', done => {
       request(app)
       .get('/api/v1/vehicles/1235/doors')
@@ -100,7 +100,7 @@ describe('Vehicles API Endpoint', () => {
     });
   })
 
-  describe('getVehicleFuelRange', () => {
+  describe('getFuelData', () => {
     it('should return 200 for a valid vehicle id', done => {
       request(app)
       .get('/api/v1/vehicles/1234/fuel')
@@ -145,7 +145,7 @@ describe('Vehicles API Endpoint', () => {
     });
   });
 
-  describe('getVehicleBatteryRange', () => {
+  describe('getBatteryData', () => {
     it('should return 200 for a valid vehicle id', done => {
       request(app)
       .get('/api/v1/vehicles/1235/battery')
@@ -155,13 +155,148 @@ describe('Vehicles API Endpoint', () => {
 
     it('should return battery data in the correct JSON format', done => {
       request(app)
-      .get('api/v1/vehicles/1235/battery')
-      .expect((res) => {
+      .get('/api/v1/vehicles/1235/battery')
+      .expect(res => {
         expect(res.body).to.be.an('object');
         expect(Object.keys(res.body)).to.have.length(1);
         expect(res.body).to.have.key('percent');
       })
       .end(done);
-    })
+    });
+
+    it('should return a number for battery percent', done => {
+      request(app)
+      .get('/api/v1/vehicles/1235/battery')
+      .expect(res => {
+        expect(res.body.percent).to.be.a('number');
+      })
+      .end(done);
+    });
+
+    it('should return null for gas cars', done => {
+      request(app)
+      .get('/api/v1/vehicles/1234/battery')
+      .expect(res => {
+        expect(res.body.percent).to.equal(null);
+      })
+      .end(done);
+    });
+
+    it('should return 404 for an invalid vehicle id', done => {
+      request(app)
+      .get('/api/v1/vehicles/1236/fuel')
+      .expect('Content-Type', /json/)
+      .expect(404, done);
+    });
   });
+
+  describe('actionEngine start engine', () => {  
+
+    it('should return 200 for a valid vehicle id', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        action: "START"
+      })
+      .expect('Content-Type', /json/)
+      .expect(200, done);
+    });
+
+    it('should return engine data in the correct JSON format', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        action: "START"
+      })
+      .expect(res => {
+        expect(res.body).to.be.an('object')
+        expect(Object.keys(res.body)).to.have.length(1);
+        expect(res.body).to.have.key('status');
+      })
+      .end(done);
+    });
+
+    it('should return either success or error', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        action: "START"
+      })
+      .expect(res => {
+        expect(res.body.status).to.be.a('string');
+        expect(res.body.status).to.be.oneOf(['success', 'error']);
+      })
+      .end(done);
+    });
+
+    it('should return 400 if no action is sent', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .expect('Content-Type', /json/)
+      .expect(400, done);
+    });
+
+    it('should return 400 if invalid action is sent', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        action: "ON"
+      })
+      .expect('Content-Type', /json/)
+      .expect(400, done);
+    })
+
+    it('should return 400 if the key is incorrect', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        command: "START"
+      })
+      .expect('Content-Type', /json/)
+      .expect(400, done);
+    })
+
+  });
+
+  describe('actionEngine stop engine', () => {  
+
+    it('should return 200 for a valid vehicle id', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        action: "STOP"
+      })
+      .expect('Content-Type', /json/)
+      .expect(200, done);
+    });
+
+    it('should return engine data in the correct JSON format', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        action: "STOP"
+      })
+      .expect(res => {
+        expect(res.body).to.be.an('object')
+        expect(Object.keys(res.body)).to.have.length(1);
+        expect(res.body).to.have.key('status');
+      })
+      .end(done);
+    });
+
+    it('should return either success or error', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        action: "STOP"
+      })
+      .expect(res => {
+        expect(res.body.status).to.be.a('string');
+        expect(res.body.status).to.be.oneOf(['success', 'error']);
+      })
+      .end(done);
+    });
+
+  });
+
 });
