@@ -11,7 +11,7 @@ const getData = (req, res) => {
   })
   .catch(err => {
     console.log('Error retreiving info from GM API getVehicleInfoService:', err);
-    res.status(502).send({reason: 'Error retreiving data from GM API'});
+    res.status(502).send({message: 'Error retreiving data from GM API'});
   })
 }
 
@@ -23,7 +23,7 @@ const getSecurityData = (req, res) => {
   })
   .catch(err => {
     console.log('Error retreiving info from GM API getSecurityStatusService:', err);
-    res.status(502).send({reason: 'Error retreiving data from GM API'});
+    res.status(502).send({message: 'Error retreiving data from GM API'});
   });
 }
 
@@ -35,10 +35,7 @@ const getFuelData = (req, res) => {
   })
   .catch(err => {
     console.log('Error retreiving info from GM API getEnergyService:', err);
-    res.status(502).send({
-      status: 502,
-      reason: 'Error retreiving data from GM API'
-    })
+    res.status(502).send({message: 'Error retreiving data from GM API'})
   });
 }
 

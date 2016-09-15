@@ -4,9 +4,7 @@ const _ = require('underscore');
 const gmApi = {
 
   getVehicleInfoService: vehicleId => {
-    console.log('the vehicle id', vehicleId);
-    let options = configurePostOptions(vehicleId)
-    return rp(`${process.env.TEST_API}/getVehicleInfoService`, options)
+    return rp(`${process.env.TEST_API}/getVehicleInfoService`, configurePostOptions(vehicleId))
     .catch(err => err)
     .then(response => response.status === '200' ? normalizeVehicleData(response) : normalizeApiError(response))
     .catch(err => {
@@ -16,8 +14,7 @@ const gmApi = {
   },
 
   getSecurityStatusService: vehicleId => { 
-    let options = configurePostOptions(vehicleId)
-    return rp(`${process.env.TEST_API}/getSecurityStatusService`, options)
+    return rp(`${process.env.TEST_API}/getSecurityStatusService`, configurePostOptions(vehicleId))
     .catch(err => err)
     .then(response => response.status === '200' ? normalizeSecurityData(response) : normalizeApiError(response))
     .catch(err => {
@@ -27,8 +24,7 @@ const gmApi = {
   },
 
   getEnergyService: vehicleId => {
-    let options = configurePostOptions(vehicleId)
-    return rp(`${process.env.TEST_API}/getEnergyService`, options)
+    return rp(`${process.env.TEST_API}/getEnergyService`, configurePostOptions(vehicleId))
     .catch(err => err)
     .then(response => response.status === '200' ? normalizeFuelData(response) : normalizeApiError(response))
     .catch(err => {
@@ -53,7 +49,6 @@ let configurePostOptions = vehicleId => {
 }
 
 let normalizeVehicleData = response => {
-
   let doorCount = getDoorCount(response.data);
   return {
     status: response.status,
@@ -71,7 +66,7 @@ let normalizeApiError = data => {
     status: data.status,
     data: {
       status: data.status,
-      reason: data.reason
+      message: data.reason
     }
   }
 }
@@ -81,7 +76,7 @@ let handleApplicationError = () => {
     status: 500,
     data: {
       status: 500,
-      reason: "Application Error"
+      message: "Application Error"
     }
   }
 }
