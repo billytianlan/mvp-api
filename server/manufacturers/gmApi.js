@@ -92,7 +92,7 @@ let normalizeSecurityData = response => {
     data: _.map(response.data.doors.values, (door) => {
       return {
         "location": door.location.value,
-        "locked": door.locked.value === "True" ? true : false
+        "locked": Boolean(door.locked.value.toLowerCase())
       }
     })
   }
@@ -102,13 +102,17 @@ let normalizeFuelData = response => {
   return {
     status: response.status,
     data: {
-      percent: response.data.tankLevel.value === 'null' ? null : Number(response.data.tankLevel.value)
+      percent: JSON.parse(response.data.tankLevel.value)
     }
   }
 }
 
 let getDoorCount = data => {
-  return data.fourDoorSedan.value === 'True' ? 4 : 2;
+  if (Boolean(data.fourDoorSedan.value.toLowerCase())) {
+    return 4
+  } else if (Boolean(data.twoDoorCoupe.value.toLowerCase())) {
+    return 2
+  }
 }
 
 module.exports = gmApi;
