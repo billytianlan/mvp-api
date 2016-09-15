@@ -5,7 +5,7 @@ const Vehicle = (vehicleId) => {
   let vehicle = {};
 
   //In the future we can have some logic that dispatches to the appropriote manufacturer API
-  //gmApi methods take vehicleId closure variable which is assigned during instantiation
+  //gmApi methods take the vehicleId closure variable which is assigned during instantiation
   vehicle.getData = () => gmApi.getVehicleInfoService(vehicleId);
   vehicle.getSecurityData = () => gmApi.getSecurityStatusService(vehicleId);
   vehicle.getEnergyData = energy => gmApi.getEnergyService(vehicleId, energy);
