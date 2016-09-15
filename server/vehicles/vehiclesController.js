@@ -43,6 +43,7 @@ const getBatteryData = (req, res) => {
   let vehicle = Vehicle(req.params.id);
   vehicle.getEnergyData('battery')
   .then(resp => {
+    console.log('battery resp', resp);
     res.status(resp.status).send(resp.data)
   })
   .catch(err => {
@@ -51,9 +52,23 @@ const getBatteryData = (req, res) => {
   });
 }
 
+const actionEngine = (req, res) => {
+  let vehicle = Vehicle(req.params.id)
+  vehicle.actionEngine(req.body.action)
+  .then(resp => {
+    console.log(resp);
+    res.status(resp.status).send(resp.data)
+  })
+  .catch(err => {
+    console.log('Error sending data to GM API actionEngineService:', err);
+    res.status(502).send({message: 'Error retreiving data from GM API'})
+  });
+}
+
 module.exports = {
   getData: getData,
   getSecurityData: getSecurityData,
   getFuelData: getFuelData,
-  getBatteryData: getBatteryData
+  getBatteryData: getBatteryData,
+  actionEngine: actionEngine
 }

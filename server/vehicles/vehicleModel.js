@@ -7,7 +7,7 @@ const Vehicle = (vehicleId) => {
   vehicle.getData = () => gmApi.getVehicleInfoService(vehicleId);
   vehicle.getSecurityData = () => gmApi.getSecurityStatusService(vehicleId);
   vehicle.getEnergyData = energy => gmApi.getEnergyService(vehicleId, energy);
-
+  vehicle.actionEngine = action => gmApi.actionEngineService(vehicleId, action);
 
   return vehicle;
 }

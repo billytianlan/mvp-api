@@ -156,8 +156,10 @@ describe('Vehicles API Endpoint', () => {
     it('should return battery data in the correct JSON format', done => {
       request(app)
       .get('api/v1/vehicles/1235/battery')
-      .expect(res => {
-        expect(res.body.percent).to.be.a('number')
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(Object.keys(res.body)).to.have.length(1);
+        expect(res.body).to.have.key('percent');
       })
       .end(done);
     })

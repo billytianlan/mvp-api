@@ -4,7 +4,10 @@ const _ = require('underscore');
 const gmApi = {
 
   getVehicleInfoService: vehicleId => {
-    return rp(`${process.env.TEST_API}/getVehicleInfoService`, configurePostOptions(vehicleId))
+    return rp(`${process.env.TEST_API}/getVehicleInfoService`, configurePostOptions({
+      id: vehicleId,
+      responseType: "JSON",
+    }))
     .catch(err => err)
     .then(response => response.status === '200' ? normalizeVehicleData(response) : normalizeApiError(response))
     .catch(err => {
@@ -14,7 +17,10 @@ const gmApi = {
   },
 
   getSecurityStatusService: vehicleId => { 
-    return rp(`${process.env.TEST_API}/getSecurityStatusService`, configurePostOptions(vehicleId))
+    return rp(`${process.env.TEST_API}/getSecurityStatusService`, configurePostOptions({
+      id: vehicleId,
+      responseType: "JSON",
+    }))
     .catch(err => err)
     .then(response => response.status === '200' ? normalizeSecurityData(response) : normalizeApiError(response))
     .catch(err => {
@@ -24,24 +30,34 @@ const gmApi = {
   },
 
   getEnergyService: (vehicleId, energy) => {
-    return rp(`${process.env.TEST_API}/getEnergyService`, configurePostOptions(vehicleId))
+    return rp(`${process.env.TEST_API}/getEnergyService`, configurePostOptions({
+      id: vehicleId,
+      responseType: "JSON",
+    }))
     .catch(err => err)
     .then(response => response.status === '200' ? normalizeEnergyData(response, energy) : normalizeApiError(response))
     .catch(err => {
       console.log('Error normalizing GM fuel data:', err)
       return handleApplicationError();
     });
+  },
+
+  actionEngineService: (vehicleId, action) => {
+    return rp(`${process.env.TEST_API}/actionEngineService`, configurePostOptions({
+      id: vehicleId,
+      responseType: "JSON",
+      command: `${action}_VEHICLE`
+    }))
+    .catch(err => err)
+    .then(response => response.status === '200' ? normalizeEngineData(response) : normalizeApiError(response))
   }
 }
 
-let configurePostOptions = vehicleId => {
+let configurePostOptions = data => {
   return {
     method: "POST",
     json: true,
-    body: {
-      id: vehicleId,
-      responseType: "JSON"
-    },
+    body: data,
     headers: {
       'content-type': 'application/json'
     }
@@ -98,6 +114,16 @@ let normalizeEnergyData = (response, energy) => {
     status: response.status,
     data: {
       percent: energy === 'fuel' ? JSON.parse(response.data.tankLevel.value) : JSON.parse(response.data.batteryLevel.value)
+    }
+  }
+}
+
+let normalizeEngineData = (response) => {
+  console.log('this is it', response);
+  return {
+    status: response.status,
+    data: {
+      status: response.actionResult.status === "EXECUTED" ? "success" : "error"
     }
   }
 }
