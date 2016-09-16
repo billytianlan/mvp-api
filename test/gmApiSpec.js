@@ -186,13 +186,6 @@ describe('GM API', () => {
       });
     });
 
-    it('should be case insensitive to the action', () => {
-      return gmApi.actionEngineService('1234', 'start')
-      .then(response => {
-        expect(response.actionResult.status).to.be.oneOf(['EXECUTED', 'FAILED']);
-      });
-    })
-
     it('should respond with 400 when no action is sent', () => {
       return gmApi.actionEngineService('1234')
       .then(response => {

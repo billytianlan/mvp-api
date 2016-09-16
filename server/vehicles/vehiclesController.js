@@ -1,4 +1,4 @@
-const vehicle = require('./vehicleModel');
+const Vehicle = require('./vehicleModel');
 
 /********************************
   Instantiate vehicle and invoke methods to interact with GM API
@@ -8,7 +8,7 @@ const vehicle = require('./vehicleModel');
 *********************************/
 
 const getData = (req, res) => {
-  vehicle.getData(req.params.id)
+  Vehicle.getData(req.params.id)
   .then(resp => {
     res.status(resp.status).send(resp.data);
   })
@@ -19,7 +19,7 @@ const getData = (req, res) => {
 }
 
 const getSecurityData = (req, res) => {
-  vehicle.getSecurityData(req.params.id)
+  Vehicle.getSecurityData(req.params.id)
   .then(resp => {
     res.status(resp.status).send(resp.data)
   })
@@ -30,7 +30,7 @@ const getSecurityData = (req, res) => {
 }
 
 const getFuelData = (req, res) => {
-  vehicle.getEnergyData(req.params.id, 'fuel')
+  Vehicle.getEnergyData(req.params.id, 'fuel')
   .then(resp => {
     res.status(resp.status).send(resp.data)
   })
@@ -41,7 +41,7 @@ const getFuelData = (req, res) => {
 }
 
 const getBatteryData = (req, res) => {
-  vehicle.getEnergyData(req.params.id, 'battery')
+  Vehicle.getEnergyData(req.params.id, 'battery')
   .then(resp => {
     res.status(resp.status).send(resp.data)
   })
@@ -54,7 +54,8 @@ const getBatteryData = (req, res) => {
 const actionEngine = (req, res) => {
   let action = req.body.action;
   if (action && typeof action === 'string' && (action.toUpperCase() === 'START' || action.toUpperCase() === 'STOP')) {
-    vehicle.actionEngine(req.params.id, action)
+    action = action.toUpperCase();
+    Vehicle.actionEngine(req.params.id, action)
     .then(resp => {
       res.status(resp.status).send(resp.data)
     })

@@ -76,6 +76,7 @@ describe('Vehicles API Endpoint', () => {
       request(app)
       .get('/api/v1/vehicles/1235/doors')
       .expect(res => {
+        console.log('wtf',res.body)
         expect(res.body).to.have.length(2)
       })
       .end(done);
@@ -304,6 +305,19 @@ describe('Vehicles API Endpoint', () => {
       })
       .end(done);
     });
+
+    it('should be case insensitive', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        action: 'start'
+      })
+      .expect(res => {
+        expect(res.body.status).to.be.a('string');
+        expect(res.body.status).to.be.oneOf(['success', 'error'])
+      })
+      .end(done);
+    })
 
   });
 

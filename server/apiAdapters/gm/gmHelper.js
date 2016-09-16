@@ -14,14 +14,43 @@ const gmHelper = {
   },
 
   normalizeVehicleData: response => {
-    let doorCount = getDoorCount(response.data);
     return {
       status: response.status,
       data: {
-        vin: response.data.vin.value,
-        color: response.data.color.value,
-        doorCount: doorCount,
-        driveTrain: response.data.driveTrain.value
+        vin: dataParser(response.data.vin),
+        color: dataParser(response.data.color),
+        doorCount: getDoorCount(response.data),
+        driveTrain: dataParser(response.data.driveTrain)
+      }
+    }
+  },
+
+  normalizeSecurityData: response => {
+    return {
+      status: response.status,
+      data: _.map(response.data.doors.values, (door) => {
+        return {
+          "location": dataParser(door.location),
+          "locked": dataParser(door.locked)
+        }
+      })
+    }
+  },
+
+  normalizeEnergyData: (response, energy) => {
+    return {
+      status: response.status,
+      data: {
+        percent: energy === 'fuel' ? dataParser(response.data.tankLevel) : dataParser(response.data.batteryLevel)
+      }
+    }
+  },
+
+  normalizeEngineData: response => {
+    return {
+      status: response.status,
+      data: {
+        status: response.actionResult.status === "EXECUTED" ? "success" : "error"
       }
     }
   },
@@ -34,45 +63,39 @@ const gmHelper = {
         message: data.reason
       }
     }
-  },
-
-  normalizeSecurityData: response => {
-    return {
-      status: response.status,
-      data: _.map(response.data.doors.values, (door) => {
-        return {
-          "location": door.location.value,
-          "locked": Boolean(door.locked.value.toLowerCase())
-        }
-      })
-    }
-  },
-
-  normalizeEnergyData: (response, energy) => {
-    return {
-      status: response.status,
-      data: {
-        percent: energy === 'fuel' ? JSON.parse(response.data.tankLevel.value) : JSON.parse(response.data.batteryLevel.value)
-      }
-    }
-  },
-
-  normalizeEngineData: response => {
-    return {
-      status: response.status,
-      data: {
-        status: response.actionResult.status === "EXECUTED" ? "success" : "error"
-      }
-    }
   }
 }
 
+//Function to handle door count
+//Currently only 2 types but ability to handle more 
 const getDoorCount = data => {
-  if (Boolean(data.fourDoorSedan.value.toLowerCase())) {
+  console.log('counting doors', dataParser.fourDoorSedan);
+  if (dataParser(data.fourDoorSedan)) {
     return 4
-  } else if (Boolean(data.twoDoorCoupe.value.toLowerCase())) {
+  } else if (dataParser(data.twoDoorCoupe)) {
     return 2
   }
+}
+
+const dataParser = data => {
+  let value;
+  switch(data.type) {
+    case "String": 
+      value = data.value.toString();
+      break;
+    case "Boolean":
+      value = data.value.toString().toLowerCase() === 'true' ? true : false;
+      break;
+    case "Number": 
+      value = Number(data.value);
+      break;
+    case "Null":
+      value = null;
+      break;
+    default: 
+      value = undefined;
+  }
+  return value;
 }
 
 module.exports = gmHelper;
