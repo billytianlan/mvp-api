@@ -69,7 +69,6 @@ const gmHelper = {
 //Function to handle door count
 //Currently only 2 types but ability to handle more 
 const getDoorCount = data => {
-  console.log('counting doors', dataParser.fourDoorSedan);
   if (dataParser(data.fourDoorSedan)) {
     return 4
   } else if (dataParser(data.twoDoorCoupe)) {
