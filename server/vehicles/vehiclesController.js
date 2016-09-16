@@ -16,7 +16,7 @@ const getData = (req, res) => {
   .catch(err => {
     console.log('Error in GET request to /vehicles/:id', err);
     res.status(500).send({message:  "Sorry we are unable to hanlde your request at this moment. We're working hard to fix the issue"});
-  })
+  });
 }
 
 const getSecurityData = (req, res) => {
@@ -56,7 +56,6 @@ const getBatteryData = (req, res) => {
 }
 
 const actionEngine = (req, res) => {
-  console.log(req.body);
   let vehicle = Vehicle(req.params.id)
   vehicle.actionEngine(req.body.action)
   .then(resp => {

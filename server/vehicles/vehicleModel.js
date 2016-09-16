@@ -1,5 +1,5 @@
 const gmApi = require('../apiAdapters/gm/gmApi'); 
-const gmHelper = require('../apiAdapters/gm/gmHelper')
+const gmHelper = require('../apiAdapters/gm/gmHelper');
 const handleError = require('../utils/errorHandler');
 
 const Vehicle = (vehicleId) => {
@@ -16,11 +16,11 @@ const Vehicle = (vehicleId) => {
   Send whatever non 200 status code back to the user after it has been normalized
   Catch, log and return errors that might have occured during normalization
   ****************************/
-  
+
   vehicle.getData = () => { 
     return gmApi.getVehicleInfoService(vehicleId)
     .then(response => response.status === '200' ? gmHelper.normalizeVehicleData(response) : gmHelper.normalizeApiError(response))
-    .catch(err => handleError(err, "Error normalizing vehicle data"))
+    .catch(err => handleError(err, "Error normalizing vehicle data"));
   };
 
   vehicle.getSecurityData = () => { 

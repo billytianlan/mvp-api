@@ -17,7 +17,7 @@ const gmApi = {
       responseType: "JSON",
     }))
     .then(response => response)
-    .catch(err => handleError(err, "Error requesting data from GM API"))
+    .catch(err => handleError(err, "Error requesting data from GM API"));
   },
 
   getSecurityStatusService: vehicleId => { 
@@ -26,7 +26,7 @@ const gmApi = {
       responseType: "JSON",
     }))
     .then(response => response)
-    .catch(err => handleError(err, "Error requesting security data from GM API"))
+    .catch(err => handleError(err, "Error requesting security data from GM API"));
   },
 
   getEnergyService: (vehicleId) => {
@@ -35,7 +35,7 @@ const gmApi = {
       responseType: "JSON",
     }))
     .then(response => response)
-    .catch(err => handleError(err, "Error requesting energy data from GM API"))
+    .catch(err => handleError(err, "Error requesting energy data from GM API"));
   },
 
   actionEngineService: (vehicleId, action) => {
@@ -46,7 +46,7 @@ const gmApi = {
       command: `${action}_VEHICLE`
     }))
     .then(response => response)
-    .catch(err => handleError(err, "Error posting engine data to GM API"))
+    .catch(err => handleError(err, "Error posting engine data to GM API"));
   }
 }
 
