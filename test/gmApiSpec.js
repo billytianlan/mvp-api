@@ -139,19 +139,90 @@ describe('GM API', () => {
     })
 
     it('should return an object with the status of 404 for an invalid vehicle id', () => {
-      return gmApi.getSecurityStatusService('1236')
+      return gmApi.getEnergyService('1236')
       .then(response => {
         expect(response.status).to.equal('404');
       });
     });
 
     it('should return a reason and status for non 200 responses', () => {
-      return gmApi.getSecurityStatusService('1236')
+      return gmApi.getEnergyService('1236')
       .then(response => {
         expect(response).to.have.all.keys('status', 'reason');
       });
     });
 
-  })
+  });
+
+  describe('actionEngineService', () => {
+
+    it('should respond with the expected data format when starting', () => {
+      return gmApi.actionEngineService('1234', 'START')
+      .then(response =>  {
+        expect(response).to.have.all.keys('service', 'status', 'actionResult')
+        expect(response).to.have.deep.property('actionResult.status');
+      });
+    });
+
+    it('should respond with the expected data format when stopping', () => {
+      return gmApi.actionEngineService('1234', 'STOP')
+      .then(response =>  {
+        expect(response).to.have.all.keys('service', 'status', 'actionResult')
+        expect(response).to.have.deep.property('actionResult.status');
+      });
+    });
+
+    it('should respond with either EXECUTED or FAILED when starting', () => {
+      return gmApi.actionEngineService('1234', 'START')
+      .then(response => {
+        expect(response.actionResult.status).to.be.oneOf(['EXECUTED', 'FAILED']);
+      });
+    });
+
+    it('should respond with either EXECUTED or FAILED when stopping', () => {
+      return gmApi.actionEngineService('1234', 'STOP')
+      .then(response => {
+        expect(response.actionResult.status).to.be.oneOf(['EXECUTED', 'FAILED']);
+      });
+    });
+
+    it('should be case insensitive to the action', () => {
+      return gmApi.actionEngineService('1234', 'start')
+      .then(response => {
+        expect(response.actionResult.status).to.be.oneOf(['EXECUTED', 'FAILED']);
+      });
+    })
+
+    it('should respond with 400 when no action is sent', () => {
+      return gmApi.actionEngineService('1234')
+      .then(response => {
+        expect(response.status).to.equal('400');
+        expect(response).to.have.all.keys('status', 'reason');
+      });
+    })
+
+    it('should respond with 400 when an incorrect action is sent', () => {
+      return gmApi.actionEngineService('1234', 'ON')
+      .then(response => {
+        expect(response.status).to.equal('400');
+        expect(response).to.have.all.keys('status', 'reason');
+      })
+    })
+
+    it('should return an object with the status of 404 for an invalid vehicle id', () => {
+      return gmApi.actionEngineService('1236')
+      .then(response => {
+        expect(response.status).to.equal('404');
+      });
+    });
+
+    it('should return a reason and status for non 200 responses', () => {
+      return gmApi.actionEngineService('1236')
+      .then(response => {
+        expect(response).to.have.all.keys('status', 'reason');
+      });
+    });
+
+  });
 
 });
