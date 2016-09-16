@@ -27,7 +27,6 @@ $ npm start
 ```
 
 Run tests (Port 8080)
-Initiate webpack.
 ```sh
 $ npm test 
 ```
