@@ -77,6 +77,7 @@ const getDoorCount = data => {
   }
 }
 
+//Parse data into given data types
 const dataParser = data => {
   let value;
   switch(data.type) {
