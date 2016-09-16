@@ -99,4 +99,59 @@ describe('GM API', () => {
 
   });
 
+  describe('getEnergyService', () => {
+
+    it('should return the expected data format', () => {
+      return gmApi.getEnergyService('1234')
+      .then(response => {
+        expect(response).to.have.all.keys('service', 'status', 'data')
+        expect(response).to.have.deep.property('data.tankLevel.value')
+        expect(response).to.have.deep.property('data.batteryLevel.value')
+      });
+    });
+
+    it('should return a number for tankLevel for a gas car', () => {
+      return gmApi.getEnergyService('1234')
+      .then(response => {
+        expect(Number(response.data.tankLevel)).to.be.a('number');
+      });
+    });
+
+    it('should return a number for batteryLevel for an electric car', () => {
+      return gmApi.getEnergyService('1235')
+      .then(response => {
+        expect(Number(response.data.batteryLevel)).to.be.a('number');
+      });
+    });
+
+    it('should return null for batteryLevel of a gas car', () => {
+      return gmApi.getEnergyService('1234')
+      .then(response => {
+        expect(JSON.parse(response.data.batteryLevel.value)).to.be.a('null')
+      })
+    })
+
+    it('should return null for tankLevel of an electric car', () => {
+      return gmApi.getEnergyService('1235')
+      .then(response => {
+        expect(JSON.parse(response.data.tankLevel.value)).to.be.a('null')
+      })
+    })
+
+    it('should return an object with the status of 404 for an invalid vehicle id', () => {
+      return gmApi.getSecurityStatusService('1236')
+      .then(response => {
+        expect(response.status).to.equal('404');
+      });
+    });
+
+    it('should return a reason and status for non 200 responses', () => {
+      return gmApi.getSecurityStatusService('1236')
+      .then(response => {
+        expect(response).to.have.all.keys('status', 'reason');
+      });
+    });
+
+  })
+
 });
