@@ -1,0 +1,35 @@
+{
+  "name": "mvp-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "PORT=8080 node_modules/.bin/mocha",
+    "start": "node_modules/.bin/nodemon server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billytianlan/mvp-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/billytianlan/mvp-api/issues"
+  },
+  "homepage": "https://github.com/billytianlan/mvp-api#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "dotenv": "^2.0.0",
+    "express": "^4.14.0",
+    "morgan": "^1.7.0",
+    "nodemon": "^1.10.2",
+    "request": "^2.74.0",
+    "request-promise": "^4.1.1",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
+    "supertest": "^2.0.0"
+  }
+}
