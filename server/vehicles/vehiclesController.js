@@ -14,7 +14,7 @@ const getData = (req, res) => {
   })
   .catch(err => {
     console.log('Error in GET request to /vehicles/:id', err);
-    res.status(500).send({message:  "Sorry we are unable to hanlde your request at this moment. We're working hard to fix the issue"});
+    res.status(500).send({message:  "Sorry we are unable to handle your request at this moment. We're working hard to fix the issue"});
   });
 }
 
@@ -25,7 +25,7 @@ const getSecurityData = (req, res) => {
   })
   .catch(err => {
     console.log('Error in GET request to /vehicles/:id/security', err);
-    res.status(500).send({message:  "Sorry we are unable to hanlde your request at this moment. We're working hard to fix the issue"});
+    res.status(500).send({message:  "Sorry we are unable to handle your request at this moment. We're working hard to fix the issue"});
   });
 }
 
@@ -36,7 +36,7 @@ const getFuelData = (req, res) => {
   })
   .catch(err => {
     console.log('Error in GET request to /vehicles/:id/fuel', err);
-    res.status(500).send({message:  "Sorry we are unable to hanlde your request at this moment. We're working hard to fix the issue"});
+    res.status(500).send({message:  "Sorry we are unable to handle your request at this moment. We're working hard to fix the issue"});
   });
 }
 
@@ -47,7 +47,7 @@ const getBatteryData = (req, res) => {
   })
   .catch(err => {
     console.log('Error in GET request to /vehicles/:id/battery', err);
-    res.status(500).send({message:  "Sorry we are unable to hanlde your request at this moment. We're working hard to fix the issue"});
+    res.status(500).send({message:  "Sorry we are unable to handle your request at this moment. We're working hard to fix the issue"});
   });
 }
 
@@ -60,7 +60,7 @@ const actionEngine = (req, res) => {
     })
     .catch(err => {
       console.log('Error in POST request to /vehicles/:id/engine', err);
-      res.status(500).send({message:  "Sorry we are unable to hanlde your request at this moment. We're working hard to fix the issue"});
+      res.status(500).send({message:  "Sorry we are unable to handle your request at this moment. We're working hard to fix the issue"});
     });
   } else {
     res.status(400).send({message: 'Please provide action parameter START or STOP'})
