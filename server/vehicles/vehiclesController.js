@@ -56,6 +56,7 @@ const getBatteryData = (req, res) => {
 }
 
 const actionEngine = (req, res) => {
+  console.log(req.body);
   let vehicle = Vehicle(req.params.id)
   vehicle.actionEngine(req.body.action)
   .then(resp => {
