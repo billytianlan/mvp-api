@@ -1,8 +1,6 @@
 const request = require('supertest');
 const expect = require('chai').expect
-const app = require('../../server/server');
-
-
+const app = require('../server/server');
 
 describe('Vehicles API Endpoint', () => {
 

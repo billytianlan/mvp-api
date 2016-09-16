@@ -58,7 +58,6 @@ const gmHelper = {
   },
 
   normalizeEngineData: response => {
-    console.log('this is it', response);
     return {
       status: response.status,
       data: {
