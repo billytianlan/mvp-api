@@ -36,6 +36,24 @@ describe('Vehicles API Endpoint', () => {
       .end(done);
     });
 
+    it('should return 4 for sedan doorCount', done => {
+      request(app)
+      .get('/api/v1/vehicles/1234')
+      .expect(res => {
+        expect(res.body.doorCount).to.equal(4);
+      })
+      .end(done);
+    });
+
+    it('should return 2 for coupe doorCount', done => {
+      request(app)
+      .get('/api/v1/vehicles/1235')
+      .expect(res => {
+        expect(res.body.doorCount).to.equal(2);
+      })
+      .end(done);
+    });
+
     it('should return 404 for an invalid vehicle id', done => {
       request(app)
       .get('/api/v1/vehicles/1236')
@@ -76,7 +94,6 @@ describe('Vehicles API Endpoint', () => {
       request(app)
       .get('/api/v1/vehicles/1235/doors')
       .expect(res => {
-        console.log('wtf',res.body)
         expect(res.body).to.have.length(2)
       })
       .end(done);
