@@ -1,4 +1,4 @@
-const Vehicle = require('./vehicleModel');
+const vehicle = require('./vehicleModel');
 
 /********************************
   Instantiate vehicle and invoke methods to interact with GM API
@@ -8,8 +8,7 @@ const Vehicle = require('./vehicleModel');
 *********************************/
 
 const getData = (req, res) => {
-  let vehicle = Vehicle(req.params.id);
-  vehicle.getData()
+  vehicle.getData(req.params.id)
   .then(resp => {
     res.status(resp.status).send(resp.data);
   })
@@ -20,8 +19,7 @@ const getData = (req, res) => {
 }
 
 const getSecurityData = (req, res) => {
-  let vehicle = Vehicle(req.params.id);
-  vehicle.getSecurityData()
+  vehicle.getSecurityData(req.params.id)
   .then(resp => {
     res.status(resp.status).send(resp.data)
   })
@@ -32,8 +30,7 @@ const getSecurityData = (req, res) => {
 }
 
 const getFuelData = (req, res) => {
-  let vehicle = Vehicle(req.params.id);
-  vehicle.getEnergyData('fuel')
+  vehicle.getEnergyData(req.params.id, 'fuel')
   .then(resp => {
     res.status(resp.status).send(resp.data)
   })
@@ -44,8 +41,7 @@ const getFuelData = (req, res) => {
 }
 
 const getBatteryData = (req, res) => {
-  let vehicle = Vehicle(req.params.id);
-  vehicle.getEnergyData('battery')
+  vehicle.getEnergyData(req.params.id, 'battery')
   .then(resp => {
     res.status(resp.status).send(resp.data)
   })
@@ -56,15 +52,19 @@ const getBatteryData = (req, res) => {
 }
 
 const actionEngine = (req, res) => {
-  let vehicle = Vehicle(req.params.id)
-  vehicle.actionEngine(req.body.action)
-  .then(resp => {
-    res.status(resp.status).send(resp.data)
-  })
-  .catch(err => {
-    console.log('Error in POST request to /vehicles/:id/engine', err);
-    res.status(500).send({message:  "Sorry we are unable to hanlde your request at this moment. We're working hard to fix the issue"});
-  });
+  let action = req.body.action;
+  if (action && typeof action === 'string' && (action.toUpperCase() === 'START' || action.toUpperCase() === 'STOP')) {
+    vehicle.actionEngine(req.params.id, action)
+    .then(resp => {
+      res.status(resp.status).send(resp.data)
+    })
+    .catch(err => {
+      console.log('Error in POST request to /vehicles/:id/engine', err);
+      res.status(500).send({message:  "Sorry we are unable to hanlde your request at this moment. We're working hard to fix the issue"});
+    });
+  } else {
+    res.status(400).send({message: 'Please provide action parameter START or STOP'})
+  }
 }
 
 module.exports = {

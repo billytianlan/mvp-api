@@ -254,6 +254,16 @@ describe('Vehicles API Endpoint', () => {
       .expect(400, done);
     })
 
+    it('should return 400 if an invalid action type is sent', done => {
+      request(app)
+      .post('/api/v1/vehicles/1235/engine')
+      .send({
+        action: 1234
+      })
+      .expect('Content-Type', /json/)
+      .expect(400, done);
+    })
+
   });
 
   describe('actionEngine stop engine', () => {  

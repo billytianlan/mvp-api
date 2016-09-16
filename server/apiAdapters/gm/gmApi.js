@@ -39,7 +39,6 @@ const gmApi = {
   },
 
   actionEngineService: (vehicleId, action) => {
-    action = action ? action.toUpperCase() : action;
     return rp(`${process.env.TEST_API}/actionEngineService`, gmHelper.configurePostOptions({
       id: vehicleId,
       responseType: "JSON",
